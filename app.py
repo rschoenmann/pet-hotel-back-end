@@ -1,9 +1,31 @@
-from flask import Flask
+import psycopg2
+from flask import Flask, jsonify, request
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-  return 'Server Works!'
+conn = psycopg2.connect(host="localhost",
+                        database="pet_hotel"
+                        )
+
+cur = conn.cursor()
+
+
+cur.execute('SELECT * FROM pet')
+cur.fetchone()
+
+@app.route('/', methods=['GET', 'POST'])
+def getPet():
+	if request.method == 'GET':
+		cur.execute('SELECT * FROM pet')
+		rows = cur.fetchall()
+		print(rows)
+		return jsonify(rows)
+		
+
+cur.execute('SELECT * FROM pet')
+rows = cur.fetchall()
+print(rows)
+
+conn.commit()
   
 @app.route('/greet')
 def say_hello():
