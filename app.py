@@ -19,7 +19,7 @@ cur.fetchone()
 @app.route('/pet', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def petRoutes():
   if request.method == 'GET':
-	  cur.execute('SELECT * FROM pet JOIN owner ON owner.id=pet.owner_id')
+	  cur.execute('SELECT * FROM owner JOIN pet ON owner.id=pet.owner_id')
 	  rows = jsonify(cur.fetchall())
 	  print(rows)
 	  return rows
@@ -27,17 +27,21 @@ def petRoutes():
 
   elif request.method == 'POST':
     # get an OK, but database isn't actually updating
-    cur.execute('INSERT INTO pet (name, owner_id, breed, color, checked_in, date_in) VALUES(%s,%s,%s,%s,%s,%s)',('fluffy','1','cotton mouth','black','True','06/12/2019'))
+    cur.execute('INSERT INTO pet (pet_name, owner_id, breed, color, checked_in, date_in) VALUES(%s,%s,%s,%s,%s,%s)',('fluffy','1','cotton mouth','black','True','06/12/2019'))
     print('hey')
     return 'OK',200
 
-  elif request.method == 'PUT':
+
+@app.route('/pet/<int:id>', methods=['PUT', 'DELETE'])
+def petDeletePut(id):
+  if request.method == 'PUT':
     # get an OK, but database isn't actually updating
-    cur.execute('UPDATE pet SET checked_in =%s WHERE id=%s',('FALSE','1'))
+    cur.execute('UPDATE pet SET checked_in =%s WHERE id=%s',('FALSE',id))
     return ('OK', 200)
 
   elif request.method == 'DELETE':
-    cur.execute('DELETE from pet WHERE pet.id=%s',(1,))
+    print(id)
+    cur.execute('DELETE from pet WHERE pet.id=%s',(id,))
     return('OK', 200)
   
 # @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
