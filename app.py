@@ -1,9 +1,9 @@
 import psycopg2
 import psycopg2.extras
 
-# import pprint
-
 from flask import Flask, jsonify, request
+# app.debug = True
+
 app = Flask(__name__)
 
 conn = psycopg2.connect(host="localhost",
@@ -22,12 +22,9 @@ cur.fetchone()
 def getPet():
 	if request.method == 'GET':
 		cur.execute('SELECT * FROM pet')
-    
 		rows = jsonify(cur.fetchall())
 		print(rows)
 		return (rows)
-
-
 
 
 cur.execute('SELECT * FROM pet')
