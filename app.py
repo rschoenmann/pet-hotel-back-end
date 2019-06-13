@@ -13,10 +13,6 @@ conn = psycopg2.connect(host="localhost",
 cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 conn.set_session(autocommit=True)
 
-cur.execute('SELECT * FROM pet')
-cur.fetchone()
-# pprint.pprint(cur.description[0].type_code)
-# column_names = [desc[0] for desc in cur.description]
 
 @app.route('/pet', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def petRoutes():
@@ -36,9 +32,15 @@ def petRoutes():
     # get an OK, but database isn't actually updating
     cur.execute('UPDATE pet SET checked_in =%s WHERE id=%s',('FALSE','1'))
     return ('OK', 200)
-  
-# @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
 
+  
+@app.route('/owner', methods=['GET', 'POST', 'DELETE'])
+def ownerRoutes():
+	if request.method == 'GET':
+		cur.execute('SELECT "owner"."id" AS "owner_id", "name", count(*) FROM "owner" JOIN "pet" ON "pet".owner_id = "owner".id GROUP BY "owner".id;')
+		rows = jsonify(cur.fetchall())
+		print(rows)
+		return rows
 
 
   
