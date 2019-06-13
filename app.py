@@ -28,9 +28,14 @@ def petRoutes():
   #   print('hey')
   #   return 200
   elif request.method == 'POST':
+    # get an OK, but database isn't actually updating
     cur.execute('INSERT INTO pet (name, owner_id, breed, color, checked_in, date_in) VALUES(%s,%s,%s,%s,%s,%s)',('fluffy','1','cotton mouth','black','True','06/12/2019'))
     print('hey')
     return 'OK',200
+  elif request.method == 'PUT':
+    # get an OK, but database isn't actually updating
+    cur.execute('UPDATE pet SET checked_in =%s WHERE id=%s',('FALSE','1'))
+    return ('OK', 200)
   
 # @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
 
