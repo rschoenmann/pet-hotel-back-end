@@ -16,8 +16,8 @@ cur.fetchone()
 def getPet():
 	if request.method == 'GET':
 		cur.execute('SELECT * FROM pet')
-		rows = cur.fetchall()
-		print(rows)
+		rows = jsonify(cur.fetchall())
+		print(rows[0])
 		return jsonify(rows)
 		
 
