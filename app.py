@@ -32,7 +32,6 @@ def petRoutes():
     # get an OK, but database isn't actually updating
     cur.execute('UPDATE pet SET checked_in =%s WHERE id=%s',('FALSE','1'))
     return ('OK', 200)
-
   
 @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
 def ownerRoutes():
