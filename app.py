@@ -33,9 +33,7 @@ def petRoutes():
     return 'OK',200
   
 # @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
-cur.execute('SELECT * FROM pet')
-rows = cur.fetchall()
-print(rows)
+
 
 conn.commit()
 
