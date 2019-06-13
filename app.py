@@ -13,9 +13,6 @@ conn = psycopg2.connect(host="localhost",
 cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
 
-cur.execute('SELECT * FROM pet')
-cur.fetchone()
-
 @app.route('/pet', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def petRoutes():
   if request.method == 'GET':
@@ -31,9 +28,15 @@ def petRoutes():
     cur.execute('INSERT INTO pet (name, owner_id, breed, color, checked_in, date_in) VALUES(%s,%s,%s,%s,%s,%s)',('fluffy','1','cotton mouth','black','True','06/12/2019'))
     print('hey')
     return 'OK',200
-  
-# @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
 
+  
+@app.route('/owner', methods=['GET', 'POST', 'DELETE'])
+def ownerRoutes():
+	if request.method == 'GET':
+		cur.execute('SELECT "owner"."id" AS "owner_id", "name", count(*) FROM "owner" JOIN "pet" ON "pet".owner_id = "owner".id GROUP BY "owner".id;')
+		rows = jsonify(cur.fetchall())
+		print(rows)
+		return rows
 
 conn.commit()
 
