@@ -1,4 +1,6 @@
 import psycopg2
+import psycopg2.extras
+
 from flask import Flask, jsonify, request
 # app.debug = True
 
@@ -8,7 +10,7 @@ conn = psycopg2.connect(host="localhost",
                         database="pet_hotel"
                         )
 
-cur = conn.cursor()
+cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 conn.set_session(autocommit=True)
 
 cur.execute('SELECT * FROM pet')
@@ -24,24 +26,21 @@ def petRoutes():
     
 
   elif request.method == 'POST':
-    cur.execute('INSERT INTO pet (pet_name, owner_id, breed, color) VALUES(%s,%s,%s,%s)',('fluffy',1,'cotton mouth','black'))
+    # get an OK, but database isn't actually updating
+    cur.execute('INSERT INTO pet (name, owner_id, breed, color, checked_in, date_in) VALUES(%s,%s,%s,%s,%s,%s)',('fluffy','1','cotton mouth','black','True','06/12/2019'))
     print('hey')
     return 'OK',200
-
+  elif request.method == 'PUT':
+    # get an OK, but database isn't actually updating
+    cur.execute('UPDATE pet SET checked_in =%s WHERE id=%s',('FALSE','1'))
+    return ('OK', 200)
   
 # @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
-cur.execute('SELECT * FROM pet')
-rows = cur.fetchall()
-print(rows)
+
 
 
   
 @app.route('/greet')
 def say_hello():
   return 'Hello from Server'
-
-
-# Make the changes to the database persistent
-conn.commit()
-
 
