@@ -46,6 +46,10 @@ def ownerRoutes():
 		print('adding owner')
 		return ('CREATED', 201)
 
+	elif request.method == 'DELETE':
+		cur.execute('DELETE FROM owner WHERE owner.id = %s;', (6,))
+		return ('OK', 200)
+
 
   
 @app.route('/greet')
