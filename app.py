@@ -9,7 +9,7 @@ conn = psycopg2.connect(host="localhost",
                         )
 
 cur = conn.cursor()
-
+conn.set_session(autocommit=True)
 
 cur.execute('SELECT * FROM pet')
 cur.fetchone()
@@ -21,25 +21,27 @@ def petRoutes():
 	  rows = jsonify(cur.fetchall())
 	  print(rows)
 	  return rows
+    
 
-  # else:
-  #   print('hey')
-  #   return 200
   elif request.method == 'POST':
-    cur.execute('INSERT INTO pet (name, owner_id, breed, color, checked_in, date_in) VALUES(%s,%s,%s,%s,%s,%s)',('fluffy','1','cotton mouth','black','True','06/12/2019'))
+    cur.execute('INSERT INTO pet (pet_name, owner_id, breed, color) VALUES(%s,%s,%s,%s)',('fluffy',1,'cotton mouth','black'))
     print('hey')
     return 'OK',200
+
   
 # @app.route('/owner', methods=['GET', 'POST', 'DELETE'])
 cur.execute('SELECT * FROM pet')
 rows = cur.fetchall()
 print(rows)
 
-conn.commit()
+
   
 @app.route('/greet')
 def say_hello():
   return 'Hello from Server'
 
 
+# Make the changes to the database persistent
 conn.commit()
+
+
