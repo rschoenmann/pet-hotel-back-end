@@ -2,6 +2,8 @@ import psycopg2
 import psycopg2.extras
 
 from flask import Flask, jsonify, request
+# app.debug = True
+
 app = Flask(__name__)
 
 conn = psycopg2.connect(host="localhost",
@@ -34,3 +36,4 @@ conn.commit()
 @app.route('/greet')
 def say_hello():
   return 'Hello from Server'
+
