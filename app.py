@@ -40,6 +40,15 @@ def ownerRoutes():
 		rows = jsonify(cur.fetchall())
 		print(rows)
 		return rows
+	
+	elif request.method == 'POST':
+		cur.execute('INSERT INTO owner (name) VALUES(%s)', ('Steve',))
+		print('adding owner')
+		return ('CREATED', 201)
+
+	elif request.method == 'DELETE':
+		cur.execute('DELETE FROM owner WHERE owner.id = %s;', (6,))
+		return ('OK', 200)
 
 
   
